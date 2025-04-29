@@ -4,40 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Content extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'url', 'category_id'];
-
-    protected $with = ['category'];
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class, 'content_genre', 'content_id', 'genre_id');
+    }
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function authors()
+    public function authors(): BelongsToMany
     {
         return $this->belongsToMany(
             Author::class,
-            'author_content', // pivot table name
-            'content_id', // foreign key on the pivot table for this model
-            'author_id', // foreign key on the pivot table for the related model
+            'author_content', // Pivot table name
+            'content_id', // Foreign key on pivot table for this model
+            'author_id'  // Foreign key on pivot table for the related model
         );
     }
-
-    /**
-     * How to implement many to many relationship
-     * TODO:
-     *  1. Create tables with migrations
-     *     - create authors table
-     *     - create contents table
-     *     - create a pivot (intermediate) table for the many-to-many relationship
-     *  2. Define the relationship in the:
-     *     - Content model (belongsToMany) belongsTo
-     *     - Author model (belongsToMany) hasMany
-     *  3. Use the relationship in your code
-     */
 }
+

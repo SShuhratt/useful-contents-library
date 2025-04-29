@@ -24,10 +24,10 @@
                         <a class="nav-link" href="/contents">Contents</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link" href="/authors">Authors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link" href="/genres">Genres</a>
                     </li>
                 </ul>
             </div>
@@ -57,9 +57,11 @@
 
     <div class="mb-3">
         <h5 class="mb-2">Genres</h5>
-        <span class="badge bg-success">Fantasy</span>
-        <span class="badge bg-success">Drama</span>
+        @foreach($content->genres as $genre)
+            <span class="badge bg-success">{{$genre->name}}</span>
+        @endforeach
     </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

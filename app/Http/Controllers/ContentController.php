@@ -40,12 +40,9 @@ class ContentController extends Controller
         return $content;
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Content $content)
     {
-        $content->load('authors');
+        $content->load('authors', 'genres');
         return view('content', ['content' => $content]);
     }
 
