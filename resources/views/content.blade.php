@@ -54,13 +54,18 @@
         <h5 class="mb-2">Category</h5>
         <span class="badge bg-secondary">{{$content->category->name}}</span>
     </div>
-
     <div class="mb-3">
         <h5 class="mb-2">Genres</h5>
         @foreach($content->genres as $genre)
             <span class="badge bg-success">{{$genre->name}}</span>
         @endforeach
     </div>
+    <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+    </form>
+
 
 </div>
 

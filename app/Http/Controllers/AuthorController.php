@@ -21,7 +21,6 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -29,7 +28,7 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

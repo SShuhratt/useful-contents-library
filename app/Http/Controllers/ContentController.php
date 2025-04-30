@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContentRequest;
 use App\Models\Category;
 use App\Models\Content;
 use Illuminate\Http\Request;
@@ -23,21 +24,27 @@ class ContentController extends Controller
      */
     public function create()
     {
+        $categories = Category::all();
+        return view('contents.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ContentRequest $request)
     {
+        $useFakeData = env('USE_FAKE_DATA', false); // Add USE_FAKE_DATA=true in .env for testing
+
         $content = Content::query()->create([
-            'title'       => ucfirst(fake()->words(rand(3,7), true)),
-            'description' => fake()->realText('100'),
-            'url'         => fake()->url,
-            'category_id' => Category::query()->inRandomOrder()->value('id'),
+            'title'       => $useFakeData ? ucfirst(fake()->words(rand(3, 7), true)) : ucfirst($request->input('title')),
+            'description' => $useFakeData ? fake()->realText(100) : $request->input('description'),
+            'url'         => $useFakeData ? fake()->url : $request->input('url'),
+            'category_id' => $useFakeData
+                ? Category::query()->inRandomOrder()->value('id')
+                : $request->input('category_id'),
         ]);
 
-        return $content;
+        return $useFakeData ? $content : redirect()->route('contents.index')->with('success', 'Content created successfully!');
     }
 
     public function show(Content $content)
@@ -51,15 +58,17 @@ class ContentController extends Controller
      */
     public function edit(Content $content)
     {
-        //
+        $categories = Category::all();
+        return view('contents.edit', compact('content', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Content $content)
+    public function update(ContentRequest $request, Content $content)
     {
-        //
+        $content->update($request->validated());
+        return redirect()->route('contents.index')->with('success', 'Content updated successfully');
     }
 
     /**
@@ -67,6 +76,7 @@ class ContentController extends Controller
      */
     public function destroy(Content $content)
     {
-        //
+        $content->delete();
+        return redirect()->route('contents.index')->with('success', 'Content deleted successfully');
     }
 }
