@@ -6,6 +6,7 @@ services:
         container_name: content-hub-app
         volumes:
             - .:/var/www
+            - ./node_modules:/var/www/node_modules
         depends_on:
             - db
         networks:
