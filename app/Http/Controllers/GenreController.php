@@ -10,27 +10,50 @@ class GenreController extends Controller
     public function index()
     {
         $genres = Genre::all();
-        return view('genres', ['genres' => $genres]);
-    }
-    public function create(){
-
-    }
-    public function store(Request $request){
-        $genre = new Genre;
-    }
-    public function show($id){
-        $content = Content::find($id);
-        $genres = Genre::all(); // Or fetch genres related to the content
-        return view('content', ['content' => $content, 'genres' => $genres]);
-    }
-    public function edit($id){
-
-    }
-    public function update(Request $request, $id){
-
-    }
-    public function destroy($id){
-
+        return view('genres.index', compact('genres'));
     }
 
+    public function create()
+    {
+        return view('genres.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|unique:genres|max:255',
+        ]);
+
+        Genre::create($validated);
+
+        return redirect()->route('genres.index')->with('success', 'Genre added successfully');
+    }
+
+    public function show(Genre $genre) // Using Route Model Binding
+    {
+        return view('genres.show', compact('genre'));
+    }
+
+    public function edit(Genre $genre) // Fix: Genre model instead of ID
+    {
+        return view('genres.edit', compact('genre'));
+    }
+
+    public function update(Request $request, Genre $genre) // Fix: Passing Genre model
+    {
+        $validated = $request->validate([
+            'name' => 'required|unique:genres|max:255',
+        ]);
+
+        $genre->update($validated);
+
+        return redirect()->route('genres.index')->with('success', 'Genre updated successfully');
+    }
+
+    public function destroy(Genre $genre) // Fix: Pass model instead of ID
+    {
+        $genre->delete();
+
+        return redirect()->route('genres.index')->with('success', 'Genre deleted successfully');
+    }
 }

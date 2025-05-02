@@ -10,59 +10,81 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the categories.
      */
     public function index()
     {
         $categories = Category::all();
-        return $categories;
+
+        // Return JSON if requested via API
+        if (request()->expectsJson()) {
+            return response()->json($categories);
+        }
+
+        return view('categories.index', compact('categories'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new category.
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        dd($request->all());
+        $validated = $request->validated();
+        $category = Category::create($validated);
+
+        return request()->expectsJson()
+            ? response()->json(['message' => 'Category created successfully', 'category' => $category], 201)
+            : redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified category.
      */
     public function show(Category $category)
     {
-        //
+        return request()->expectsJson()
+            ? response()->json($category)
+            : view('categories.show', compact('category'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the category.
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.edit', compact('category'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified category.
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $validated = $request->validated();
+        $category->update($validated);
+
+        return request()->expectsJson()
+            ? response()->json(['message' => 'Category updated successfully', 'category' => $category])
+            : redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category.
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return request()->expectsJson()
+            ? response()->json(['message' => 'Category deleted successfully'])
+            : redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }

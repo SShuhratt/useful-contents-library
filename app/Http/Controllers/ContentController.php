@@ -6,17 +6,15 @@ use App\Http\Requests\ContentRequest;
 use App\Models\Category;
 use App\Models\Content;
 use Illuminate\Http\Request;
+use Faker\Factory as Faker;
 
 class ContentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $contents = Content::all();
 
-        return view('contents', ['contents' => $contents]);
+        return view('contents.index', compact('contents'));
     }
 
     /**

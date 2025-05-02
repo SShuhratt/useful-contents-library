@@ -14,6 +14,6 @@ class Author extends Model
 
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class);
+        return $this->belongsToMany(Content::class,  'author_content', 'author_id', 'content_id');
     }
 }
