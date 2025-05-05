@@ -3,19 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContentRequest;
+use App\Models\Author;
 use App\Models\Category;
+use App\Models\Genre;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Faker\Factory as Faker;
 
 class ContentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contents = Content::all();
+        $query = Content::query();
+
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%')
+                ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+
+        $contents = $query->latest()->paginate(10);
 
         return view('contents.index', compact('contents'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -23,8 +33,12 @@ class ContentController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('contents.create', compact('categories'));
+        $authors = Author::all();
+        $genres = Genre::all();
+
+        return view('contents.create', compact('categories', 'authors', 'genres'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +62,7 @@ class ContentController extends Controller
     public function show(Content $content)
     {
         $content->load('authors', 'genres');
-        return view('content', ['content' => $content]);
+        return view('contents.show', ['content' => $content]);
     }
 
     /**

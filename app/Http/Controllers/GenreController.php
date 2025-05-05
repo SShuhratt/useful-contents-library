@@ -7,11 +7,19 @@ use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $genres = Genre::all();
+        $query = Genre::query();
+
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $genres = $query->latest()->paginate(10);
+
         return view('genres.index', compact('genres'));
     }
+
 
     public function create()
     {
@@ -31,6 +39,7 @@ class GenreController extends Controller
 
     public function show(Genre $genre) // Using Route Model Binding
     {
+        $genre->load('contents');
         return view('genres.show', compact('genre'));
     }
 

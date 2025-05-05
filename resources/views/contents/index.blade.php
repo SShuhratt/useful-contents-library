@@ -1,60 +1,53 @@
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Content Hub</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-</head>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Content Hub</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/categories">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contents</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/authors">Authors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/genres">Genres</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div class="container">
-    <div class="row">
-        @foreach($contents as $content)
-            <div class="col-4 mb-3 p-3 mb-sm-0">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{$content->title}}</h5>
-                        <p class="card-text">{{$content->description}}</p>
-                        <a href="/contents/{{$content->id}}" class="btn btn-primary">Open</a>
+@extends('layout')
 
-                        {{-- Add the Delete button --}}
-                        @if(auth()->user() && auth()->user()->isAdmin())
-                            <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning mt-2">Edit</a>
-                            <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">
-                                    Delete
-                                </button>
-                            </form>
-                        @endif
+@section('title', 'Contents List')
+
+@section('content')
+    <div class="container py-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Contents List</h2>
+
+                <form method="GET" action="{{ route('contents.index') }}" class="mb-3">
+                    <input type="text" name="search" placeholder="Search contents..." class="form-control" value="{{ request()->search }}">
+                    <button type="submit" class="btn btn-primary mt-2">Search</button>
+                </form>
+
+                @if(auth()->check() && auth()->user()->isAdmin())
+                    <a href="{{ route('contents.create') }}" class="btn btn-success mb-3">+ Add New Content</a>
+                @endif
+
+                <div class="container">
+                    <div class="row">
+                        @foreach($contents as $content)
+                            <div class="col-md-4 mb-3">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $content->title }}</h5>
+                                        <p class="card-text">{{ Str::limit($content->description, 100) }}</p>
+                                        <a href="{{ route('contents.show', $content->id) }}" class="btn btn-primary">Open</a>
+
+                                        @if(auth()->user() && auth()->user()->isAdmin())
+                                            <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning mt-2">Edit</a>
+                                            <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-</div>
 
+                <div class="mt-4 flex justify-center space-x-2">
+                    {!! $contents->links('pagination::bootstrap-5') !!}
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

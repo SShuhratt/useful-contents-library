@@ -10,7 +10,7 @@ class GenreApiController extends Controller
 {
     public function index()
     {
-        return response()->json(Genre::all(), 200);
+        return response()->json(Genre::paginate(10), 200);
     }
 
     public function store(Request $request)

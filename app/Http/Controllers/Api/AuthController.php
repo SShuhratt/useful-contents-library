@@ -32,24 +32,29 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
-        if (!Auth::attempt($validated)) {
-            throw ValidationException::withMessages([
-                'email' => ['Invalid credentials.'],
-            ]);
+        if (!auth()->attempt($validated)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('api-token')->plainTextToken;
+        $user = auth()->user();
+
+        // Only generate a token if the user is an admin
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Access restricted to admins'], 403);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
-            'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'token' => $token
         ]);
     }
+
 
     public function logout(Request $request)
     {

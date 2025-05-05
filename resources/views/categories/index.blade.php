@@ -5,7 +5,14 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <h2 class="card-title mb-4">Categories List</h2>
+                {{-- 🔹 Added Search Form --}}
+                <form method="GET" action="{{ route('categories.index') }}" class="mb-3">
+                    <input type="text" name="search" placeholder="Search categories..." class="form-control" value="{{ request()->search }}">
+                    <button type="submit" class="btn btn-primary mt-2">Search</button>
+                </form>
+
                 <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Create Category</a>
+
                 <ul class="list-group">
                     @foreach ($categories as $category)
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -23,8 +30,11 @@
                         </li>
                     @endforeach
                 </ul>
+
+                <div class="mt-4 flex justify-center space-x-2">
+                    {!! $categories->links('pagination::bootstrap-5') !!}
+                </div>
             </div>
         </div>
     </div>
 @endsection
-

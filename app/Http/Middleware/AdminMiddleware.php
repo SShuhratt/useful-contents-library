@@ -8,17 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->isAdmin()) {
-            return $next($request);
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return response()->json(['message' => 'Access denied. Admins only.'], 403);
         }
-        return redirect('/')->with('error', 'Access denied.');
-    }
 
+        return $next($request);
+    }
 }

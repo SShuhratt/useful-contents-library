@@ -12,17 +12,19 @@ class CategoryController extends Controller
     /**
      * Display a listing of the categories.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $query = Category::query();
 
-        // Return JSON if requested via API
-        if (request()->expectsJson()) {
-            return response()->json($categories);
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
+
+        $categories = $query->latest()->paginate(10);
 
         return view('categories.index', compact('categories'));
     }
+
 
     /**
      * Show the form for creating a new category.

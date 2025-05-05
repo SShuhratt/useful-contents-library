@@ -11,7 +11,7 @@ class ContentApiController extends Controller
 {
     public function index()
     {
-        return response()->json(Content::all());
+        return response()->json(Content::paginate(10));
     }
 
     public function store(ContentRequest $request)

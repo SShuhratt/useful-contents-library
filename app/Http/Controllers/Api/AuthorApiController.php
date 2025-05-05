@@ -10,7 +10,7 @@ class AuthorApiController extends Controller
 {
     public function index()
     {
-        return response()->json(Author::all(), 200);
+        return response()->json(Author::paginate(10));
     }
 
     public function store(Request $request)

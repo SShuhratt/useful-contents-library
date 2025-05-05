@@ -10,7 +10,7 @@ class CategoryApiController extends Controller
 {
     public function index()
     {
-        return response()->json(Category::all(), 200);
+        return response()->json(Category::paginate(10), 200);
     }
 
     public function store(Request $request)

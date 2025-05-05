@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Genre extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name'];
 
-    protected $fillable = ["name"];
-
-    public function genres(): BelongsToMany
+    public function contents()
     {
-        return $this->belongsToMany(Content::class);
+        return $this->hasMany(Content::class);
     }
 }
+

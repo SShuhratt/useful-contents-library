@@ -6,14 +6,19 @@
             <div class="card-body">
                 <h2 class="card-title mb-4">{{ $genre->name }}</h2>
 
-                <h4 class="mb-3">Contents in this Genre:</h4>
-                <ul class="list-group">
-                    @foreach ($genre->contents as $content)
-                        <li class="list-group-item">
-                            <a href="{{ route('genres.show', $content->id) }}">{{ $content->title }}</a>
-                        </li>
-                    @endforeach
-                </ul>
+                @if ($genre->contents && $genre->contents->count() > 0)
+                    <h4 class="mb-3">Contents in this Genre:</h4>
+                    <ul class="list-group">
+                        @foreach ($genre->contents as $content)
+                            <li class="list-group-item">
+                                <a href="{{ route('contents.show', $content->id) }}">{{ $content->title }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-muted">No contents available for this genre.</p>
+                @endif
+
 
                 <div class="mt-4">
                     <a href="{{ route('genres.index') }}" class="btn btn-secondary">Back to Categories</a>

@@ -1,49 +1,57 @@
 @extends('layout')
 
+@section('title', 'Create New Content')
+
 @section('content')
     <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title mb-4">Create New Content</h2>
+        <h1 class="mb-3">Add New Content</h1>
 
-                <form action="{{ route('contents.store') }}" method="POST">
-                    @csrf
+        <form action="{{ route('contents.store') }}" method="POST">
+            @csrf
 
-                    {{-- Title Field --}}
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title:</label>
-                        <input type="text" name="title" id="title" class="form-control" required>
-                    </div>
-
-                    {{-- Description Field --}}
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description:</label>
-                        <textarea name="description" id="description" class="form-control"></textarea>
-                    </div>
-
-                    {{-- URL Field --}}
-                    <div class="mb-3">
-                        <label for="url" class="form-label">URL:</label>
-                        <input type="url" name="url" id="url" class="form-control">
-                    </div>
-
-                    {{-- Category Field --}}
-                    <div class="mb-3">
-                        <label for="category_id" class="form-label">Category:</label>
-                        <select name="category_id" id="category_id" class="form-select">
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Action Buttons --}}
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-success">Create</button>
-                        <a href="{{ route('contents.index') }}" class="btn btn-secondary">Cancel</a>
-                    </div>
-                </form>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="url" class="form-label">External Link (Optional)</label>
+                <input type="url" class="form-control" id="url" name="url">
+            </div>
+
+            <div class="mb-3">
+                <label for="category_id" class="form-label">Category</label>
+                <select class="form-select" id="category_id" name="category_id" required>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="genres" class="form-label">Genres</label>
+                <select class="form-select" id="genres" name="genres[]" multiple>
+                    @foreach($genres as $genre)
+                        <option value="{{ $genre->id }}">{{ $genre->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="authors" class="form-label">Authors</label>
+                <select class="form-select" id="authors" name="authors[]" multiple>
+                    @foreach($authors as $author)
+                        <option value="{{ $author->id }}">{{ $author->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Content</button>
+        </form>
     </div>
 @endsection

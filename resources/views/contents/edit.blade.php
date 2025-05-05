@@ -10,25 +10,21 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- Title Field --}}
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
                         <input type="text" name="title" id="title" class="form-control" value="{{ $content->title }}" required>
                     </div>
 
-                    {{-- Description Field --}}
-                    <div class="mb-3">
+                 <div class="mb-3">
                         <label for="description" class="form-label">Description:</label>
                         <textarea name="description" id="description" class="form-control">{{ $content->description }}</textarea>
                     </div>
 
-                    {{-- URL Field --}}
                     <div class="mb-3">
                         <label for="url" class="form-label">URL:</label>
                         <input type="url" name="url" id="url" class="form-control" value="{{ $content->url }}">
                     </div>
 
-                    {{-- Category Field --}}
                     <div class="mb-3">
                         <label for="category_id" class="form-label">Category:</label>
                         <select name="category_id" id="category_id" class="form-select">
@@ -40,7 +36,6 @@
                         </select>
                     </div>
 
-                    {{-- Action Buttons --}}
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{ route('contents.index') }}" class="btn btn-secondary">Cancel</a>
