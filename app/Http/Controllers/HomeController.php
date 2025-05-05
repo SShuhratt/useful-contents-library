@@ -1,17 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
+use App\Models\Category;
+use App\Models\Content;
 
 class HomeController extends Controller
 {
-    public function home(): View|Application|Factory
+    public function index()
     {
-        return view('home');
+        $categories = Category::all();
+        $categoryContents = [];
+
+        // Retrieve 5 contents for each category
+        foreach ($categories as $category) {
+            $categoryContents[$category->id] = Content::where('category_id', $category->id)
+                ->latest()
+                ->take(5)
+                ->get();
+        }
+
+        return view('home', compact('categories', 'categoryContents'));
     }
 }

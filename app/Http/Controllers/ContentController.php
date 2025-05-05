@@ -56,10 +56,8 @@ class ContentController extends Controller
      */
     public function edit(Content $content)
     {
-        $categories = Category::all();
-        return view('contents.edit', compact('content', 'categories'));
+        return view('contents.edit', compact('content'));
     }
-
     /**
      * Update the specified resource in storage.
      */

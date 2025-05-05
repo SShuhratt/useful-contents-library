@@ -11,6 +11,14 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{{ route('genres.show', $genre->id) }}">{{ $genre->name }}</a>
                             <div>
+                                @if(auth()->user() && auth()->user()->isAdmin())
+                                    <a href="{{ route('genres.edit', $genre->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('genres.destroy', $genre->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
+                                    </form>
+                                @endif
                                 <a href="{{ route('genres.edit', $genre->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('genres.destroy', $genre->id) }}" method="POST" style="display:inline;">
                                     @csrf

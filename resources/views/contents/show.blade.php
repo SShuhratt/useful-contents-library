@@ -60,11 +60,16 @@
             <span class="badge bg-success">{{$genre->name}}</span>
         @endforeach
     </div>
-    <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-    </form>
+    @if(auth()->user() && auth()->user()->isAdmin())
+        <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning mt-2">Edit</a>
+        <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">
+                Delete
+            </button>
+        </form>
+    @endif
 
 
 </div>

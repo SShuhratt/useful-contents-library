@@ -41,14 +41,16 @@
                         <a href="/contents/{{$content->id}}" class="btn btn-primary">Open</a>
 
                         {{-- Add the Delete button --}}
-                        <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">
-                                Delete
-                            </button>
-                        </form>
-
+                        @if(auth()->user() && auth()->user()->isAdmin())
+                            <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning mt-2">Edit</a>
+                            <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>

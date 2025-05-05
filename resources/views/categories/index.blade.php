@@ -11,12 +11,14 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{{ route('categories.show', $category->id) }}">{{ $category->name }}</a>
                             <div>
-                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
-                                </form>
+                                @if(auth()->user() && auth()->user()->isAdmin())
+                                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</button>
+                                    </form>
+                                @endif
                             </div>
                         </li>
                     @endforeach

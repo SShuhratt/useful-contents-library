@@ -17,7 +17,9 @@
 
                 <div class="mt-4">
                     <a href="{{ route('authors.index') }}" class="btn btn-secondary">Back to Categories</a>
-                    <a href="{{ route('authors.edit', $author->id) }}" class="btn btn-warning">Edit Category</a>
+                    @if(auth()->user() && auth()->user()->isAdmin())
+                        <a href="{{ route('authors.edit', $author->id) }}" class="btn btn-warning">Edit Category</a>
+                    @endif
                 </div>
             </div>
         </div>

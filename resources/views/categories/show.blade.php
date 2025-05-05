@@ -17,7 +17,9 @@
 
                 <div class="mt-4">
                     <a href="{{ route('categories.index') }}" class="btn btn-secondary">Back to Categories</a>
-                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">Edit Category</a>
+                    @if(auth()->user() && auth()->user()->isAdmin())
+                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning">Edit Category</a>
+                    @endif
                 </div>
             </div>
         </div>
