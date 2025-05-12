@@ -8,7 +8,7 @@
                 <form action="{{ route('authors.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Category Name:</label>
+                        <label for="name" class="form-label">Author Name:</label>
                         <input type="text" name="name" id="name" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-success">Create</button>

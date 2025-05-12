@@ -1,43 +1,52 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index()
     {
-        $users = User::paginate(10);
+        $users = $this->userService->getPaginatedUsers();
         return view('admin.users.index', compact('users'));
     }
 
     public function promote(User $user)
     {
-        Gate::authorize('admin-actions');
-        $user->update(['role' => 'admin']);
+        Gate::authorize('promote-user');
+        $this->userService->promote($user);
 
         return redirect()->route('admin.users.index')->with('success', 'User promoted to admin.');
     }
 
     public function demote(User $user)
     {
-        Gate::authorize('admin-actions');
-        $user->update(['role' => 'user']);
+        Gate::authorize('demote-user');
+        $this->userService->demote($user);
 
         return redirect()->route('admin.users.index')->with('success', 'User demoted to standard user.');
     }
 
     public function destroy(User $user)
     {
-        Gate::authorize('admin-actions');
+        Gate::authorize('delete-user');
 
-        if ($user->role === 'admin') {
+        $result = $this->userService->delete($user);
+
+        if ($result === 'admin_blocked') {
             return redirect()->route('admin.users.index')->with('error', 'Admins cannot be deleted.');
         }
 
-        $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 }

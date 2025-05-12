@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
     ];
 
     protected $middleware = [
-        \App\Http\Middleware\AdminMiddleware::class,  // 🔹 Force-register middleware globally
+//        \App\Http\Middleware\AdminMiddleware::class,
     ];
 
 }

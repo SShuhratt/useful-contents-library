@@ -1,0 +1,16 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#6600
+    [34mall[39m: [
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#6827
+        [34mid[39m: [35m3[39m,
+        [34mname[39m: "[32mdelete user[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2025-05-09 15:27:43[39m",
+        [34mupdated_at[39m: "[32m2025-05-09 15:27:43[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#6822
+          [34mrole_id[39m: [35m4[39m,
+          [34mpermission_id[39m: [35m3[39m,
+        },
+      },
+    ],
+  }
+

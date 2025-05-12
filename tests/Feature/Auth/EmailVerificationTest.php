@@ -8,8 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
+use Tests\TestCaseFeature;
 
-class EmailVerificationTest extends TestCase
+class EmailVerificationTest extends TestCaseFeature
 {
     use RefreshDatabase;
 

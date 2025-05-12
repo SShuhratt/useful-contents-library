@@ -50,7 +50,23 @@ class User extends Authenticatable
     }
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'superadmin']);
     }
 
+    public function isSuperAdmin(){
+        return $this->role==='superadmin';
+    }
+    public function getRoleAttribute()
+    {
+        return $this->roles->pluck('name')->first(); // Fetch Spatie's role
+    }
+
+    public function setRoleAttribute($value)
+    {
+        $role = \Spatie\Permission\Models\Role::where('name', $value)->first();
+
+        if ($role) {
+            $this->syncRoles([$role->name]); // Sync Spatie role
+        }
+    }
 }

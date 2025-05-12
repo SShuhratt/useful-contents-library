@@ -25,11 +25,11 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $content->title }}</h5>
                                         <p class="card-text">{{ Str::limit($content->description, 100) }}</p>
-                                        <a href="{{ route('contents.show', $content->id) }}" class="btn btn-primary">Open</a>
+                                        <a href="{{ route('contents.show', ['content' => $content->id]) }}" class="btn btn-primary">Open</a>
 
                                         @if(auth()->user() && auth()->user()->isAdmin())
-                                            <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning mt-2">Edit</a>
-                                            <form action="{{ route('contents.destroy', $content->id) }}" method="POST" style="display:inline;">
+                                            <a href="{{ route('contents.edit', ['content' => $content->id]) }}" class="btn btn-warning mt-2">Edit</a>
+                                            <form action="{{ route('contents.destroy', ['content' => $content->id]) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete this?')">

@@ -6,7 +6,8 @@
     <div class="container py-5">
         <h1 class="mb-3">Add New Content</h1>
 
-        <form action="{{ route('contents.store') }}" method="POST">
+{{--        <form action="{{ route('contents.store') }}" method="POST">--}}
+        <form action="/contents" method="POST">
             @csrf
 
             <div class="mb-3">
