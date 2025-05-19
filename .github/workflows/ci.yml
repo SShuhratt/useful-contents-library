@@ -26,8 +26,8 @@ jobs:
             cd /var/www/shuhrat/useful-contents-library
             git pull origin SShuhratt-patch-1
             composer install --no-interaction --prefer-dist --optimize-autoloader
-            docker exec content-hub-app php artisan migrate --force
-            docker exec content-hub-app php artisan config:cache
-            docker exec content-hub-app php artisan route:cache
-            docker exec content-hub-app php artisan view:cache
+            docker exec shuhrat-content-hub-app php artisan migrate --force
+            docker exec shuhrat-content-hub-app php artisan config:cache
+            docker exec shuhrat-content-hub-app php artisan route:cache
+            docker exec shuhrat-content-hub-app php artisan view:cache
           EOF
