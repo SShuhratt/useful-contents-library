@@ -1,7 +1,10 @@
 name: Deploy Laravel App
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - SShuhratt-patch-1
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,10 +15,10 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          echo "$DEPLOY_KEY" > key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
           chmod 600 key.pem
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to server
         run: |
