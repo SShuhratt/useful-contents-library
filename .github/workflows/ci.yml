@@ -17,13 +17,12 @@ jobs:
         run: |
           echo "${{ secrets.DEPLOY_KEY }}" > key.pem
           chmod 600 key.pem
-
-      - name: Add server to known_hosts
-        run: ssh-keyscan 185.191.141.44 >> ~/.ssh/known_hosts
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
 
       - name: Deploy to server
         run: |
-          ssh -i key.pem root@185.191.141.44 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i key.pem root@185.191.141.44 << 'EOF'
             cd /var/www/shuhrat/useful-contents-library
             git pull origin SShuhratt-patch-1
             composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -32,6 +31,3 @@ jobs:
             docker exec content-hub-app php artisan route:cache
             docker exec content-hub-app php artisan view:cache
           EOF
-
-      - name: Clean up SSH key
-        run: rm -f key.pem
