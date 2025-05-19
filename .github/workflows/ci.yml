@@ -17,17 +17,21 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
           chmod 600 key.pem
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known_hosts
+        run: ssh-keyscan 185.191.141.44 >> ~/.ssh/known_hosts
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem root@185.191.141.44 << 'EOF'
-            cd /var/www/useful-contents-library
-            git pull origin rustam-swe-patch-1
+          ssh -i key.pem root@185.191.141.44 << 'EOF'
+            cd /var/www/shuhrat/useful-contents-library
+            git pull origin SShuhratt-patch-1
             composer install --no-interaction --prefer-dist --optimize-autoloader
             docker exec content-hub-app php artisan migrate --force
             docker exec content-hub-app php artisan config:cache
             docker exec content-hub-app php artisan route:cache
             docker exec content-hub-app php artisan view:cache
           EOF
+
+      - name: Clean up SSH key
+        run: rm -f key.pem
