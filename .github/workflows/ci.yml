@@ -1,10 +1,7 @@
 name: Deploy Laravel App
 
 on:
-  push:
-    branches:
-      - rustam-swe-patch-1
-    workflow_dispatch:
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,10 +12,10 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          echo "$SSH_PRIVATE_KEY" > key.pem
+          echo "$DEPLOY_KEY" > key.pem
           chmod 600 key.pem
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
 
       - name: Deploy to server
         run: |
