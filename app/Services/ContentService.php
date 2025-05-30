@@ -8,17 +8,20 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ContentService
 {
-    public function getContents(?string $search = null): LengthAwarePaginator
+    public function getContents(?string $search = null)
     {
-        $query = Content::query();
+        $query = Content::query()
+            ->with(['likes'])
+            ->withCount(['likes'])
+            ->latest();
 
         if ($search) {
-            $query->where('title', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
+            $query->where('title', 'like', '%' . $search . '%');
         }
 
-        return $query->latest()->paginate(10);
+        return $query->paginate(9);
     }
+
 
     public function createContent(array $data, bool $useFakeData = false): Content
     {

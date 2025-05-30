@@ -17,6 +17,8 @@
                                     <h5 class="card-title">{{ $content->title }}</h5>
                                     <p class="card-text">{{ Str::limit($content->description, 100) }}</p>
                                     <a href="{{ route('contents.show', $content->id) }}" class="btn btn-primary">Open</a>
+
+                                    <x-like-button :content="$content" />
                                 </div>
                             </div>
                         </div>

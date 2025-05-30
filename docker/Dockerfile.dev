@@ -1,6 +1,9 @@
 FROM php:8.4-fpm
+
+# Set working directory
 WORKDIR /var/www/shuhrat
 
+# Install PHP extensions and required system packages
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -13,11 +16,17 @@ RUN apt-get update && apt-get install -y \
     git \
     nano \
     libpq-dev \
+    gnupg \
     && docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip
+
+# Install Node.js 18 and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-#RUN chown -R www-data:www-data /var/www/shuhrat \
-#    && chmod -R 755 /var/www/shuhrat/storage /var/www/shuhrat/bootstrap/cache
-CMD ["php-fpm"]
+# RUN chown -R www-data:www-data /var/www/shuhrat \
+#     && chmod -R 755 /var/www/shuhrat/storage /var/www/shuhrat/bootstrap/cache
 
+# Default command
+CMD ["php-fpm"]

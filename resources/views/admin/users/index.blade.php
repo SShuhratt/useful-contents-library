@@ -20,9 +20,12 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ ucfirst($user->role) }}</td>
+                    <td>{{ ucfirst(optional($user->roles->first())->name ?? 'User') }}</td>
                     <td>
-                        @if ($user->role !== 'admin')
+                        @php
+                            $userRole=$user->roles->pluck('name')
+                        @endphp
+                        @if ($userRole!== 'admin' || $userRole!='superadmin')
                             <form method="POST" action="{{ route('admin.users.promote', $user->id) }}" style="display:inline;">
                                 @csrf
                                 @method('PUT')

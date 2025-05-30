@@ -48,7 +48,7 @@ class ContentController extends Controller
 
     public function show(Content $content)
     {
-        $content->load('authors', 'genres');
+        $content->load(['authors', 'genres', 'likes'])->loadCount('likes');
         return view('contents.show', ['content' => $content]);
     }
 
@@ -70,5 +70,24 @@ class ContentController extends Controller
     {
         $this->contentService->deleteContent($content);
         return redirect()->route('contents.index')->with('success', 'Content deleted successfully');
+    }
+
+    public function toggleLike(Content $content)
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $existingLike = $content->likes()->where('user_id', $user->id)->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+        } else {
+            $content->likes()->create([
+                'user_id' => $user->id,
+            ]);
+        }
+        return redirect()->back();
     }
 }

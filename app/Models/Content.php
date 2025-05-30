@@ -30,5 +30,14 @@ class Content extends Model
             'author_id'  // Foreign key on pivot table for the related model
         );
     }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function likedBy(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }
 

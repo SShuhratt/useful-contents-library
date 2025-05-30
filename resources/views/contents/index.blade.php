@@ -27,6 +27,8 @@
                                         <p class="card-text">{{ Str::limit($content->description, 100) }}</p>
                                         <a href="{{ route('contents.show', ['content' => $content->id]) }}" class="btn btn-primary">Open</a>
 
+                                        <x-like-button :content="$content" />
+
                                         @if(auth()->user() && auth()->user()->isAdmin())
                                             <a href="{{ route('contents.edit', ['content' => $content->id]) }}" class="btn btn-warning mt-2">Edit</a>
                                             <form action="{{ route('contents.destroy', ['content' => $content->id]) }}" method="POST" style="display:inline;">

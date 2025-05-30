@@ -12,7 +12,7 @@ services:
         networks:
             - content-hub
         environment:
-            DB_HOST: content-hub-db
+            DB_HOST: db
             DB_PORT: 5432
             DB_USERNAME: user
             DB_PASSWORD: 123456

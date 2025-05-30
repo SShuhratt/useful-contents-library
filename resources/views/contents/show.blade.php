@@ -39,6 +39,22 @@
             @endif
         </div>
 
+        <!-- 👍 Like/Unlike Section -->
+        <div class="mb-4">
+            @auth
+                <form action="{{ route('contents.like', $content->id) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                            class="btn {{ $content->likes->contains('user_id', auth()->id()) ? 'btn-danger' : 'btn-outline-danger' }}">
+                        {{ $content->likes->contains('user_id', auth()->id()) ? 'Unlike' : 'Like' }}
+                    </button>
+                    <span class="ms-2 text-muted">{{ $content->likes->count() }} {{ Str::plural('Like', $content->likes->count()) }}</span>
+                </form>
+            @else
+                <p class="text-muted">Log in to like this content.</p>
+            @endauth
+        </div>
+
         @if(auth()->check() && auth()->user()->isAdmin())
             <div class="mt-4">
                 <a href="{{ route('contents.edit', $content->id) }}" class="btn btn-warning">Edit</a>

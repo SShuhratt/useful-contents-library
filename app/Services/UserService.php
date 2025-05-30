@@ -9,32 +9,46 @@ class UserService
 {
     public function getPaginatedUsers()
     {
-        return User::paginate(10);
+        $currentUser = auth()->user();
+
+        if ($currentUser->hasRole('superadmin')) {
+            return User::paginate(10);
+        }
+
+        return User::whereDoesntHave('roles', function ($query) {
+            $query->whereIn('name', ['admin', 'superadmin']);
+        })->paginate(10);
     }
+
 
     public function promote(User $user)
     {
-        // Ensure the user isn't already a superadmin
-        if ($user->hasRole('superadmin')) {
-            throw new \Exception('Superadmin cannot be promoted');
+        if(auth()->user()->roles->pluck('name')->first()=='superadmin'){
+            if ($user->hasRole('superadmin') || $user->hasRole('admin')) {
+                throw new \Exception('(Super)admin cannot be promoted');
+            }
+            $user->assignRole('admin');
         }
-
-        // Assign admin role
-        $user->assignRole('admin');
     }
 
     public function demote(User $user)
     {
-        // Demote user to 'user' role
-        $user->syncRoles(['user']);
+        if(auth()->user()->roles->pluck('name')->first()=='superadmin'){
+            if ($user->hasRole('superadmin') || $user->hasRole('user')) {
+                throw new \Exception('(Super)admin and users cannot be demoted');
+            }
+            $user->assignRole('user');
+        }
     }
 
     public function delete(User $user)
     {
-        if ($user->hasRole('admin')) {
-            return 'admin_blocked';  // Prevent deleting admins
+        if (($user->hasRole('admin') || $user->hasRole('superadmin')) && (auth()->user()->roles->pluck('name')->first()!='superadmin')) {
+            return '(Super)admin cannot be deleted';
         }
-
+        elseif ($user->hasRole('superadmin') && auth()->user()->roles->pluck('name')->first()=='superadmin') {
+            return 'Superadmin cannot be deleted';
+        }
         $user->delete();
         return true;
     }
